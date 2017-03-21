@@ -1,0 +1,5 @@
+#lang racket
+(define vector-sum(lambda (v)
+                    (if(= (vector-length v) 0) (0)
+                    (+ (vector-ref v 0) vector-sum(vector-drop v 1)))))
+(provide vector-sum)

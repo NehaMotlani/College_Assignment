@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dynamic Webpage</title>
+	<script src = "./node_modules/itws2-sample-marks-data/index.js">
+	</script>
+</head>
+<body>
+<select id='mySelect' onchange="somefunc()">
+<script>
+var data = students;
+var list = '';
+for(var name in data){	
+list += "<option value="+name+">"+name+"</option>";
+}
+document.getElementById('mySelect').innerHTML = list ;
+</script> 
+</select>
+<table border="1">
+	<thead>
+		<tr>
+		<th>Name</th>
+		<th>Marks 1</th>
+		<th>Marks 2</th>
+		<th>Marks 3</th>
+		<th>Marks 4</th>
+		<th>Marks 5</th>
+		<th>Percentage</th>
+		<th>Grade</th>
+		</tr>
+	</thead>
+	<tbody id="abc"></tbody>
+	<script>
+	function somefunc(){
+	var sel = document.getElementById('mySelect') ;
+	var perc = (data[sel.value][0]+data[sel.value][1]+data[sel.value][2]+data[sel.value][3]+data[sel.value][4])/5;
+	var grade = '' ;
+	if(perc >= 90)
+		grade = 'A';
+	if(perc < 90 && perc >=80)
+		grade = 'B';
+	if(perc < 80 && perc >=70)
+		grade = 'C';
+	if(perc < 70 && perc >=60)
+		grade = 'D';
+	if(perc < 60)
+		grade ='F';
+	var max = 0 ; var min = 101 ; var a = 0 ; var b = 0;
+	for (var i = 0; i <= 4; i++) {
+		if(max < data[sel.value][i]){
+			max = data[sel.value][i] ;
+			a = i ;
+		}
+	}
+	for (var i = 0; i <= 4; i++) {
+		if(min > data[sel.value][i]){
+			min = data[sel.value][i] ;
+			b = i ;
+		}
+	}
+	var print = "<tr> <td>" + sel.value + "  </td>"
+					+ "<td id = "+0+">" + data[sel.value][0]+"</td>"
+					+ "<td id = "+1+">" + data[sel.value][1]+"</td>"
+					+ "<td id = "+2+">" + data[sel.value][2]+"</td>"
+					+ "<td id = "+3+">" + data[sel.value][3]+"</td>"
+					+ "<td id = "+4+">" + data[sel.value][4]+"</td>"
+					+ "<td>" + perc+"</td>"
+					+ "<td>" + grade+"</td>"
+					+ "</tr>";
+	document.getElementById('abc').innerHTML = print ;	
+	document.getElementById(a).style.color = "green" ;
+	document.getElementById(b).style.color = "red" ;
+	}
+	</script>
+</table>
+</body>
+</html>

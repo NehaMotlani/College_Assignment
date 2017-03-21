@@ -1,0 +1,31 @@
+  This (the Directory node) gives a menu of major topics.
+  This (the Directory node) gives a menu of major topics.
+  This (the Directory node) gives a menu of major topics.
+  This (the Directory node) gives a menu of major topics.
+  This (the Directory node) gives a menu of major topics.
+
+  3.1.1
+     1.C-x C-f hello.txt
+     2.C-h i ?
+     3.C-h-i C-h-r
+     4.C-spc M-w C-y C-y C-y C-y C-y
+  
+  3.1.2
+    1.
+    C-5 p   
+    C-4 f
+    C-3 n 
+    2.
+    C-x o
+    M-f 3
+    C-5 b
+
+  3.1.3
+    1.
+    saving	
+    save-buffers-kill-terminal
+    2.
+    It lists the sub-directories and files.
+
+ 
+	

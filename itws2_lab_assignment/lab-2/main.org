@@ -1,0 +1,38 @@
+#+TITLE: Org-mode Lab
+#+AUTHOR: Neha Motlani
+#+EMAIL: nmotlani6@gmail.com
+
+* Org 1
+** Target Link
+
+** Markups and plain list
+- *List item 1*
+- /List item 2/
+- =List item 3=
+- ~List item 4~
+
+# +BEGIN_SRC scheme
+  (define ring-area   
+            (lambda (outer-radius inner-radius)
+              (* 3.14 (- (* outer-radius outer-radius) (* inner-radius inner-radius)))))
+# +END_SRC 
+
+
+# +BEGIN_SRC scheme
+(define even_20(lambda (a)
+                 (if(= a 40) (a) (if(= (remainder a 2) 0) (even_20 (+ a 2)) (even_20 (+ a 1))))))
+(provide even_20)
+# +END_src
+
+* Links
+-[[Markups and plain list][ Text
+]]-[[http://pascal.iiit.ac.in/~itws2/docs/labs/emacs-orgmode/index.html#sec-3-2-4][ course]]
+-[[/home/neha/assignment/emacs/20161004/labs/lab-2][ hello.txt]]
+
+* Bonus:table 
+	| A | B | A*B |
+	|---+---+-----|
+	| 0 | 0 | 0   |
+	| 0 | 1 | 0   |
+	| 1 | 0 | 0   |
+	| 1 | 1 | 1   |

@@ -1,0 +1,85 @@
+* Introduction
+  Implementing objects in JS
+* Problem 1
+  Person class has following fields
+    Name Age Sex
+* Solution to Problem 1:
+  #+name:personcode.js
+  #+BEGIN_SRC scheme
+  var Person = function(Name,Age,Sex)
+{
+	this.name = Name;
+	this.age = Age;
+	this.sex = Sex;
+};
+
+Person.prototype.getName = function()
+{ 
+	return this.name;
+};
+  #+END_SRC
+
+* Problem 2
+   Teacher(class)= This class contains(inherit) the Person class and has Subject as additional fields.
+   Student(class)= This class contains(inherit) the Person class and has Roll Number 
+   and Subjects as additional fields.
+* Solutions to problem 2
+  #+name:classroomcode.js
+  #+BEGIN_SRC scheme 
+  var Person = function(Name,Age,Sex)
+{
+	this.name = Name;
+	this.age = Age;
+	this.sex = Sex;
+};
+
+Person.prototype.getName = function()
+{ 
+	return this.name;
+};
+
+var Teacher = function(Name,Age,Sex,Subject)
+{
+	Person.call(this,Name,Age,Sex);
+	var myObject = this;
+	myObject.subject = Subject;
+};
+
+var Student = function(Name,Age,Sex,Roll_Number,Subjects)
+{
+	Person.call(this,Name,Age,Sex);
+	var myObject = this;
+	myObject.rollno = Roll_Number;
+	myObject.subjects = Subjects;
+};
+
+var getParticipants=function(subjectName,persons)
+{
+	console.log("Teacher:");
+	for(var i=0;i<persons.length;i++)
+	{
+		if(subjectName == persons[i].subject)
+			console.log(persons[i].name);
+		//else if(subjectName == persons[i].subjects)
+			//console.log(persons[i].rollno);
+		
+	}
+	console.log("Students:");
+	for(var i =0;i<persons.length;i++)
+	{
+		for(var j in persons[i].subjects)
+		{
+			if(subjectName == persons[i].subjects[j])
+				console.log(persons[i].rollno);
+		}
+	}
+	return ;
+}
+  #+END_SRC
+* Tangling
+  #+BEGIN_SRC scheme :eval no :noweb yes :tangle personcode.js
+<<personcode.js>>  
+  #+END_SRC
+#+BEGIN_SRC scheme :eval no :noweb yes :tangle classroomcode.js
+<<classroomcode.js>>
+#+END_SRC

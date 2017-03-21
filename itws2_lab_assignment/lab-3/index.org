@@ -1,0 +1,13 @@
+Hello world
+#+TITLE: MY FIRST ITWS REPO
+#+AUTHOR: Neha Motlani
+#+EMAIL: nmotlani6@gmail.com
+#+SETUPFILE: ../../org-templates/level-2.org
+
+* This contains all my lab work.
+** I can also add links here.
+** HAAAIIII
+** NAAIII
+** THIK H
+** OK
+ 

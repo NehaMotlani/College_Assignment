@@ -1,0 +1,261 @@
+
+#+TITLE: Assignment 3 ITWS2
+#+AUTHOR: Neha Motlani
+#+EMAIL: neha.motlani@research.iiit.ac.in
+#+SETUPFILE: ../../org-templates/level-2.org
+#+EXCLUDE_TAGS: boilerplate
+#+PROPERTY: session *scheme*
+#+PROPERTY: results output
+#+PROPERTY: exports code
+#+TAGS: boilerplate(b) notes(n) solution(s)
+
+
+* Introduction
+  This =main.org= file has the solutions of the assignment 3 namely =More with lists= in racket.
+  Along with the solution it also contains the reason of the code to work.
+  
+* Preamble
+
+** Module language
+
+#+name: lang_racket
+#+BEGIN_SRC scheme :session none 
+#lang racket
+#+END_SRC
+   
+** Imports
+
+This section lists all the required modules, some of them are added on the basis of their requirement.
+
+#+NAME: imports
+#+BEGIN_SRC scheme  
+(require racket/list)
+(require rackunit)
+(require racket/contract)
+(require racket/trace)
+(require racket/math)
+#+END_SRC
+
+
+* Problem 1 =split-list= :
+  Given a list of numbers and a number, create a function split-list that returns two lists (Lists of lists) such that:
+
+    The first list contains numbers from the original list which are less than or equal to the given number.
+    The second list contains numbers from the original list which are greater than the given number.
+
+    NOTE: The ordering of the numbers in the resultant lists should not change.
+* Solution to Problem 1
+  The solution is structured as follows:
+** Purpose
+The purpose of =split-list= is to split a list into 2 parts such that first list contains numbers lesser than
+or equal to a given number and second list contains numbers greater than the given number.
+** Example usage
+#+name: split-list_usage
+#+BEGIN_SRC scheme :eval no
+(split-list '(3 1 2 6 5 7 5) 5) 
+==> '((3 1 2 5 5) (6 7))
+#+END_SRC
+** Signature and Definition
+=split-list= takes a list and number and returns a list of lists.
+#+name: split-list
+#+BEGIN_SRC scheme
+;;; split-list : [list?, value?] -> list?
+
+(define helper1
+  (lambda (ls a l1 l2)
+    (if(null? ls)
+       (cons l1 (list l2))
+       (if (<= (first ls) a)
+           (begin
+             (set! l1 (append l1 (list (first ls))))
+             (helper1 (rest ls) a l1 l2))
+           (begin (set! l2 (append l2 (list (first ls))))
+                  (helper1 (rest ls) a l1 l2))
+           ))))
+
+(define split-list
+  (lambda (ls a)
+    (helper1 ls a '() '())))
+
+#+END_SRC
+** Test cases
+These test cases demonstrate that the program works for some of the time.
+#+name: split-list_tests
+#+BEGIN_SRC scheme
+(check-equal? (split-list '() 3) '(() ()) "test 1")
+(check-equal? (split-list '(1 2 3 4) 5) '((1 2 3 4) ()) "test 2")
+(check-equal? (split-list '(3 1 2 6 5 7 5) 5) '((3 1 2 5 5) (6 7)) "test 3")
+(check-equal? (split-list '(3 1 2 6 5 7 5) 0) '(() (3 1 2 6 5 7 5)) "test 4")
+#+END_SRC
+** Export
+This declaration exports the definition =split-list=.
+#+name: split-list_exports
+#+BEGIN_SRC scheme 
+(provide split-list
+         helper1
+)
+#+END_SRC
+
+
+* Problem 2 =flatten-list= :
+  Given a nested list structure, write a function flatten-list which flattens the structure into a single dimensional list. 
+* Solution to Problem 2
+  The solution is structured as follows:
+** Purpose
+The purpose of the =flatten-list= is to convert a nested list into a single dimensional list. 
+** Example usage
+#+name: flatten-list_usage
+#+BEGIN_SRC scheme :eval no
+(flatten-list '(1 (2 3 (4)))) => '(1 2 3 4)
+#+END_SRC
+** Signature and Definition
+=flatten-list= takes a list(nested) and returns a single dimensional list.
+#+name: flatten-list
+#+BEGIN_SRC scheme
+;;; flatten-list : list? -> list?
+
+(define (flatten-list ls)
+  (cond ((null? ls) '())
+        ((list? (car ls))
+         (append (flatten-list (car ls))
+                 (flatten-list (cdr ls))))
+        (else (append (list (car ls)) (flatten-list (cdr ls))))))  
+
+#+END_SRC
+** Test cases
+These test cases demonstrate that the program works for some of the time.
+#+name: flatten-list_tests
+#+BEGIN_SRC scheme
+(check-equal? (flatten-list '()) '() "test 1")
+(check-equal? (flatten-list '((1) () (2))) '(1 2) "test 2")
+(check-equal? (flatten-list '((1 2) ())) '(1 2) "test 3")
+(check-equal? (flatten-list '(() (1) (3 4))) '(1 3 4) "test 4")
+(check-equal? (flatten-list '(1 (2 (3 4) 5) 6)) '(1 2 3 4 5 6) "test 5")
+#+END_SRC
+** Export
+This declaration exports the definition =flatten-list=.
+#+name: flatten-list_exports
+#+BEGIN_SRC scheme 
+(provide flatten-list)
+#+END_SRC
+
+* Problem 3 =map*= :
+  Recall function =list-map= from assignment 2. Using the same, implement a function map* which takes a 
+  function op and a nested list l as arguments and applies the function to every element of the list. 
+* Solution to Problem 3...
+  The solution is as follows:
+** Purpose
+The purpose of =map*= function is to modify list according to a given function.
+** Example usage
+#+name: map*_usage 
+#+BEGIN_SRC scheme :eval no
+(map* even? '(2 (4 3) ())) => '(#t (#t #f) ())
+#+END_SRC
+** Signature and Definition
+=map*= takes a function or operation and a list as an input and
+applies that function on all elements of the list and returns them as a list. 
+#+name: map*
+#+BEGIN_SRC scheme
+;;; map* : [procedure?, list?] -> list?
+
+(define map*
+  (lambda (f ls)
+    (if (null? ls) '()
+        (if (list? (car ls))
+          (cons (map* f (car ls))(map* f (cdr ls)))
+          (cons (f (car ls)) (map* f (cdr ls)))))))
+
+#+END_SRC
+** Test cases
+These test cases demonstrate that the program works for some of the time.
+#+name: map*_tests
+#+BEGIN_SRC scheme
+ (check-equal? (map* even? '(2 (4 3) ())) '(#t (#t #f) ()) "test 1")
+ (check-equal? (map* add1 '((1 2) 3 (4 5) (6 7))) '((2 3) 4 (5 6) (7 8)) "test 2")
+ (check-equal? (map* boolean? '(1 #t #f -2 0)) '(#f #t #t #f #f) "test 3")
+#+END_SRC
+** Export
+This declaration exports the definition =map*=.
+#+name: map*_exports
+#+BEGIN_SRC scheme 
+(provide map*
+)
+#+END_SRC
+
+
+* Problem 4 =reduce*= :
+   Recall =reduce= function from Assignment-2.
+
+Your task is to write a reduce* function which takes a binary function op, 
+an initial value init and a nested list l as input and reduces the list to an answer. 
+* Solution to Problem 4
+  The solution is as follows:
+** Purpose
+Use =reduce*= function to apply an operation on a nested list and return a value. 
+** Example usage
+#+name: reduce*_usage
+#+BEGIN_SRC scheme :eval no
+(reduce* + 0 '(1 (2 3) (4 5))) => 15
+#+END_SRC
+** Signature and Definitions
+=reduce*= takes in a function =op=, an initial value =init= and a nested list =l=
+and returns a final value.
+#+name: reduce*
+#+BEGIN_SRC scheme
+;;; reduce* : [procedure?, value?, list?] -> value?
+
+(define reduce
+  (lambda(f init ls)
+    (if(empty? ls)
+       init
+       (reduce f (f (first ls) init) (rest ls)))))
+
+ (define reduce*
+  (lambda (f init ls)
+    (reduce f init (flatten-list ls))))
+
+#+END_SRC 
+** Test cases
+These test cases demonstrate that the program works for some of the time.
+#+name: reduce*_tests
+#+BEGIN_SRC scheme
+(define (binary-and x y)
+    (and x y))
+
+  (check-equal? (reduce* binary-and #t '((#t #t) (#t #t) #f)) #f "test 1")
+  (check-equal? (reduce* binary-and #t '(#t (#t #t))) #t "test 2")
+  (check-equal? (reduce* + 0 '(1 (2 3) (4 5))) 15 "test 3")
+  (check-equal? (reduce* * 1 '((3 5) (2))) 30 "test 4")
+#+END_SRC
+** Export
+This declaration exports the definition =reduce*=.
+#+name: reduce*_exports
+#+BEGIN_SRC scheme
+(provide reduce
+         reduce*
+)
+#+END_SRC
+
+
+* Tangle
+Now it's time to take all the code blocks and put them togeher and tangle them into =main.rkt=.
+#+BEGIN_SRC scheme :eval no :noweb yes :tangle main.rkt 
+<<lang_racket>>
+<<imports>>
+<<split-list_exports>>
+<<flatten-list_exports>>
+<<map*_exports>>
+<<reduce*_exports>>
+<<split-list_imports>>
+<<flatten-list_imports>>
+<<map*_imports>>
+<<reduce*_imports>>
+<<split-list>>
+<<flatten-list>>
+<<map*>>
+<<reduce*>>
+<<split-list_tests>>
+<<flatten-list_tests>>
+<<map*_tests>>
+<<reduce*_tests>>
+#+END_SRC
